@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="servicehttp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hola!</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body ng-controller="micontroller">
+    {{foto | json}}
+    <button ng-click="traerFotos()">
+        Traer fotos
+    </button>
+    <diV ng-repeat="photo in photos">
+        {{photo | json}} <button ng-click="traerFoto(photo.id)">Traer detalle</button><button ng-click="borrarFoto(photo.id)">borrar</button>
+    </diV>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script>
+        angular.module('servicehttp', [])
+            .constant('urlBase', 'https://jsonplaceholder.typicode.com/photos')
+            .controller('micontroller', function ($scope, $http, urlBase) {
+                // var callUno = $http({ method: 'GET', url: 'https://jsoholder.typicode.com/photos' });
+                // obetner = GET
+                // crear = POST
+                // editar = PUT
+                // borrar = DELETE
+                $scope.traerFotos = function () {
+                    var callUno = $http.get(urlBase)
+                    callUno.then(function (response) {
+                        $scope.photos = response.data
+                    }).catch(function (response) {
+                        debugger
+                    })
+                }
+                $scope.traerFoto = function (id) {
+                    debugger
+                    var callUno = $http.get(urlBase + '/' + id)
+                    callUno.then(function (response) {
+                        $scope.foto = response.data
+                    }).catch(function (response) {
+                    })
+                }
+                $scope.borrarFoto = function (id) {
+                    debugger
+                    var callUno = $http.delete(urlBase + '/' + id)
+                    callUno.then(function (response) {
+                        $scope.foto = response.data
+                    }).catch(function (response) {
+                    })
+                }
+            })
+    </script>
+</body>
+
+</html>

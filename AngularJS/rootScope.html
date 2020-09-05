@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang='es' ng-app='rootScope'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>{{titulo}}</title>
+</head>
+
+<body>
+    <main ng-controller='rootScopeController'>
+        <form ng-submit="cambiarTitulo()">
+            <div>
+                <label>
+                    Nuevo título<br>
+                    <input type="text" ng-model="tituloNuevo" required>
+                </label>
+            </div>
+            <button type="submit">Cambiar título</button>
+        </form>
+    </main>
+    <script src='libs/angularjs/angular.min.js'></script>
+    <script src='rootScope.js'></script>
+</body>
+
+</html>

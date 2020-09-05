@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="factories">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios y fabricas</title>
+</head>
+
+<body>
+    <main ng-controller="micantroleer">
+        {{resultadodefabrica}}
+        {{resultadodeservicio}}
+    </main>
+    <div ng-controller="miotros">
+        <button ng-click="clickButton()">Clcik
+        </button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script>
+        angular.module('factories', [])
+            .controller('micantroleer', function ($scope, fabrica, servicio) {
+                $scope.resultadodefabrica = fabrica();
+                $scope.resultadodeservicio = servicio.getAlgo();
+                servicio.setAlgo('algo');
+            })
+            .controller('miotros', function ($scope, servicio) {
+                $scope.clickButton = function(){
+                    console.log(servicio.getAlgo());
+                }
+            })
+            .factory('fabrica', function ($http) {
+                return function () {
+                    return 'fabrica funcionando';
+                }
+            })
+            .factory('servicio', function ($http) {
+                var miSrv = {};
+                var algo = '';
+
+                miSrv.getAlgo = function(){
+                    return algo;
+                }
+                miSrv.setAlgo = function(data){
+                    algo = data;
+                }
+                return miSrv;
+            })
+    </script>
+</body>
+
+</html>

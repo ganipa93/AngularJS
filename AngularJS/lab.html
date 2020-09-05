@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="laboratorio">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="lab">
+  <title>{{title}}</title>
+</head>
+
+<body>
+  <main>
+    <section ng-controller="listado" ng-hide="isForm">
+      <table>
+        <thead>
+          <th>Nombre</th>
+          <th>apellido</th>
+          <th>edad</th>
+          <th>coaching</th>
+          <td></td>
+        </thead>
+        <tbody>
+          <tr ng-repeat="empleado in empleados">
+            <td>{{empleado.nombre}}</td>
+            <td>{{empleado.apellido}}</td>
+            <td>{{empleado.edad}}</td>
+            <td>{{empleado.coaching}}</td>
+            <td>
+              <button ng-click="remove($index)">X</button>
+            </td>
+          </tr>
+        <tfoot>
+          <tr>
+            <td colspan="5">
+              Total: {{empleados.length}}<br>
+              Couching: {{countCoach()}}
+            </td>
+          </tr>
+        </tfoot>
+        </tbody>
+      </table>
+      <button ng-click="agregarUser()">Agregar usuario</button>
+    </section>
+    <section ng-controller="form" ng-show="isForm">
+      <div>
+        <label>Nombre: <input type="text" ng-model="newEmp.nombre"></label>
+      </div>
+      <div>
+        <label> Aepllido: <input type="text" ng-model="newEmp.apellido"></label>
+      </div>
+      <div>
+        <label>Edad: <input type="number" ng-model="newEmp.edad"></label>
+      </div>
+      <div>
+        <label>Coach: <input type="checkbox" ng-model="newEmp.co"></label>
+      </div>
+      <button ng-click="addEmp()">Agregar</button>
+    </section>
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+  <script src="lab.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="clase3">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 3</title>
+    <style>
+        main,
+        main>section {
+            display: flex;
+        }
+
+        main {
+            justify-content: space-around;
+        }
+
+        main>section {
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        main> :last-child>* {
+            width: 200px;
+        }
+
+        label {
+            display: block;
+            padding: 5px;
+        }
+
+        form.submitted.ng-invalid {
+            border: 1px solid red;
+        }
+
+        form.submitted input.ng-invalid,
+        form.submitted select.ng-invalid {
+            color: red;
+            border: 1px solid red;
+        }
+
+        form.submitted label.invalid {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <main ng-controller="listado">
+        <section>
+            <table>
+                <thead>
+                    <td></td>
+                    <th>Nombre</th>
+                    <th>apellido <button ng-click="cambiarOrder('apellido')">order</button></th>
+                    <th>edad <button ng-click="cambiarOrder('edad')">order</button></th>
+                    <th>coaching</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="empleado in empleados | orderBy :orderProp :orderReverse">
+                        <td>
+                            <!-- indice: {{$index}}<br>
+                            primero: {{$first}}<br>
+                            inpar: {{$odd}}<br> -->
+                            <img ng-src="{{urBaseImagenes + empleado.avatar}}" width="100"></td>
+                        <td>{{empleado.nombre | uppercase}}</td>
+                        <td>{{empleado.apellido}}</td>
+                        <td>{{empleado.edad}}</td>
+                        <td>{{empleado.coaching}}</td>
+                        <td>
+                            <button ng-click="empleados.splice($index, 1)">remover</button>
+                        </td>
+                    </tr>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            Total: {{empleados.length}}<br>
+                        </td>
+                    </tr>
+                </tfoot>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <div>
+                <label>
+                    Nombre: <input type="text" ng-model="nuevoEmpleado.nombre">
+                </label>
+                <label>
+                    Apepplido: <input type="text" ng-model="nuevoEmpleado.apellido">
+                </label>
+                <label>
+                    Edad: <input type="text" ng-model="nuevoEmpleado.edad">
+                </label>
+                <button ng-click="agregarEmpleado()">
+                    Agregar
+                </button>
+            </div>
+            <form ng-class="{
+                submitted : empleadoForm.$submitted }
+                " novalidate name="empleadoForm" ng-submit="submitEmpleado($event)">
+                <!-- {{
+                    empleadoForm | json
+                }} -->
+                <ul>
+                    <li>pristine {{empleadoForm.$pristine}}</li>
+                    <li>dirty {{empleadoForm.$dirty}}</li>
+                    <li>valid {{empleadoForm.$valid}}</li>
+                    <li>invalid {{empleadoForm.$invalid}}</li>
+                    <li>submitted {{empleadoForm.$submitted}}</li>
+                </ul>
+                <label ng-class="{
+                    invalid: empleadoForm.apellido.$invalid && empleadoForm.apellido.$touched
+                }">
+                    Nombre: <input type="text" name="nombre" ng-model="nuevoEmpleado.nombre" required>
+                    <ul ng-if="empleadoForm.nombre.$error && empleadoForm.$submitted">
+                        <li ng-if="empleadoForm.nombre.$error.required">
+                            Nombre requerido
+                        </li>
+                        <li ng-if="empleadoForm.nombre.$error.minlength">
+                            Ingresar almenos 3 letras
+                        </li>
+                    </ul>
+                    <!-- <ul>
+                        <li>pristine {{empleadoForm.nombre.$pristine}}</li>
+                        <li>dirty {{empleadoForm.nombre.$dirty}}</li>
+                        <li>touched {{empleadoForm.nombre.$touched}}</li>
+                        <li>untouched {{empleadoForm.nombre.$untouched}}</li>
+                        <li>valid {{empleadoForm.nombre.$valid}}</li>
+                        <li>invalid {{empleadoForm.nombre.$invalid}}</li>
+                    </ul> -->
+                    <!-- {{
+                        empleadoForm.nombre | json
+                    }} -->
+                </label>
+                <label ng-class="{ invalid: empleadoForm.apellido.$invalid }">
+                    Apepplido: <input type="text" name="apellido" ng-model="nuevoEmpleado.apellido" required>
+                </label>
+                <label ng-class="{
+                    invalid: empleadoForm.apellido.$invalid && empleadoForm.apellido.$touched
+                }">
+                    Edad: <input type="number" name="edad" ng-model="nuevoEmpleado.edad" required ng-min="edadMinima">
+                </label>
+                <label ng-class="{
+                    invalid: empleadoForm.apellido.$invalid && empleadoForm.apellido.$touched
+                }">
+                    Email: <input type="email" name="email" ng-model="nuevoEmpleado.email" required>
+                    <ul ng-if="empleadoForm.email.$error && empleadoForm.$submitted">
+                        <li ng-if="empleadoForm.email.$error.required">
+                            Email requerido
+                        </li>
+                        <li ng-if="empleadoForm.email.$error.email">
+                            Formarto incorrecto: ej. mail@mail.com
+                        </li>
+                    </ul>
+                </label>
+                <label ng-class="{
+                    invalid: empleadoForm.solonumeros.$invalid && empleadoForm.solonumeros.$touched
+                }">
+                    Solo numeros: <input type="number" name="solonumeros" ng-model="nuevoEmpleado.solonumeros" required ng-pattern="PatternSoloNum">
+                    <ul ng-if="empleadoForm.solonumeros.$error && empleadoForm.$submitted">
+                        <li ng-if="empleadoForm.solonumeros.$error.required">
+                            solo numeros requerido
+                        </li>
+                        <li ng-if="empleadoForm.solonumeros.$error.pattern">
+                            Solo numeros
+                        </li>
+                    </ul>
+                </label>
+                <label>
+                    Pais: <select name="pais" ng-model="nuevoEmpleado.pais" ng-options="pais for pais in paises"
+                        required ng-change="changePais($event)"></select>
+                </label>
+                <label>
+                    Provincia: <select name="provincia" ng-model="nuevoEmpleado.provincia" ng-change="changeProv($event)"
+                        ng-options="provincia for provincia in provincias" ng-required="empleadoForm.pais.$valid" ng-disabled="empleadoForm.pais.$invalid"></select>
+                </label>
+                <label>
+                    Ciudad: <select name="ciudad" ng-model="nuevoEmpleado.ciudad"
+                        ng-options="ciudad for ciudad in ciudades" ng-required="ciudadEsRequerido()" ng-disabled="!ciudadEsRequerido()"></select>
+                </label>
+                <button type="submit">
+                    Agregar
+                </button>
+            </form>
+        </section>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="clase3.app.js"></script>
+    <script src="clase3.empleados.controler.js"></script>
+</body>
+
+</html>

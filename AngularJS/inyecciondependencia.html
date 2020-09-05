@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="inyeccion">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hola!</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <main ng-contoller="micontroller">
+        {{algo}}
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script>
+
+
+        angular.module('inyeccion', [])
+        // .controller('micontroller', ['$scope', 'translate', function (a, b) {
+        // }]);
+
+
+        var miController = function ($scope, $timeout) {
+            $scope.algo = 'asfasdf';
+            debugger
+        }
+        miController.$inject = ['$scope', '$timeout'];
+
+        angular.module('inyeccion').controller('micontroller', miController);
+    </script>
+</body>
+
+</html>

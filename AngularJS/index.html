@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="eduit">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hola!</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <!-- <header ng-bind="9 + 10"></header>
+  <header ng-init="mivar = 'Chicos'" ng-bind="'Hola ' + mivar"></header>
+  <header ng-init="mivar = 'Chicos'" ng-bind="'Hola ' + mivar"></header> -->
+  <header ng-controller="header">
+    {{nombreEmpresa}}
+    <button ng-click="nombreEmpresa = opciones.google">{{opciones.google}}</button>
+    <button ng-click="nombreEmpresa = opciones.eduit">{{opciones.eduit}}</button>
+  </header>
+  <main ng-controller="home">
+    <p>{{mensaje}}</p> ashgdajsh
+    <button ng-click="myclick($event)">Hace click</button>
+
+    <main>
+      <section>
+        <header>
+          Datos del usario:
+          <ul>
+            <li>{{user.nombre}}</li>
+            <li>{{user.apellido}}</li>
+          </ul>
+          <button ng-click="modificarDatos()">Cambiar datos</button>
+        </header>
+        <div>
+          <label>Nombre: <input type="text" ng-model="user.nombre"></label>
+        </div>
+        <div>
+          <label> Aepllido: <input type="text" ng-model="user.apellido"></label>
+        </div>
+      </section>
+      <section>
+        <h2>Alumnos</h2>
+        <ul>
+          <li ng-repeat="alunmno in alumnos">
+            <h3>{{ $index }} {{alunmno}}</h3>
+            <!-- <p>{{descripcion}}</p> -->
+          </li>
+        </ul>
+      </section>
+    </main>
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+  <script src="app.js"></script>
+  <script src="controller.header.js"></script>
+  <script src="controller.home.js"></script>
+</body>
+
+</html>

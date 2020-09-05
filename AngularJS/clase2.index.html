@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="clase2">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="lab">
+    <title>Clase 2</title>
+
+    <style>
+        .active-item {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div>cargando</div>
+    <main ng-controller="inicio" ng-cloak>
+        <section>
+            <h1>switch <input ng-model="opcionSelect"></h1>
+            <div ng-switch="opcionSelect">
+                <span ng-switch-when="uno">Opcion 1</span>
+                <span ng-switch-when="dos">Opcion 2</span>
+                <span ng-switch-when="tres">Opcion 3</span>
+                <span ng-switch-default>Opcion default</span>
+            </div>
+        </section>
+        <section>
+            <h1>Disable</h1>
+            <div contenteditable="">
+                <h1>dfjasdhk</h1>
+            </div>
+            <form ng-submit="enviar($event)">
+                <label>
+                    Nombre<input type="text" ng-model="user.nombre" ng-disabled="desactivado || enviando" required>
+                </label>
+                <label>
+                    Apellido
+                    <input type="text" ng-model="user.apellido"
+                        ng-disabled="user.nombre === '' || desactivado || enviando" required>
+                </label>
+                <input type="checkbox" ng-model="desactivado">
+                <button ng-disabled="enviando">{{enviando? 'Enviando': 'Enviar'}}</button>
+            </form>
+        </section>
+        <section ng-init="urlEnlace = '#secciondiez'; classActive = false;">
+            <h1 >Directivas</h1>
+            <a ng-href="{{'secciones.html'+urlEnlace}}">Enlace</a>
+            <h2 ng-style="{ 'background-color': colorDefault }">ng-style</h2>
+            <h2 ng-style="myStyle">ng-style</h2>
+
+            <h2 ng-class="{ 'active-item': classActive }">
+                ng-class <input type="checkbox" ng-model="classActive" ng-change="changeCheck()">
+            </h2>
+            <h2 ng-class="classNg">ng-class <input type="checkbox" ng-model="classActive"></h2>
+        </section>
+        <h1 ng-cloak>{{ 'titulo' | customerFilter: 'askdjfhaks' }}</h1>
+        <h1>
+            {{ fecha | date: formatDate}}
+            <!-- {{ fecha }} -->
+            {{formatDate}}
+            <select ng-options="formato for formato in formatos" ng-model="formatDate">
+                <option value="">Formato</option>
+            </select>
+        </h1>
+        <code>{{empleados | json }}</code>
+        <table>
+            <thead>
+                <td></td>
+                <th>Nombre</th>
+                <th>apellido <button ng-click="cambiarOrder('apellido')">order</button></th>
+                <th>edad <button ng-click="cambiarOrder('edad')">order</button></th>
+                <th>coaching</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="empleado in empleados | orderBy :orderProp :orderReverse">
+                    <td>{{$first ? 'primero' : ''}}<img ng-src="{{urBaseImagenes + empleado.avatar}}" width="100"></td>
+                    <td>{{empleado.nombre | uppercase}}</td>
+                    <td>{{empleado.apellido}}</td>
+                    <td>{{$odd}}{{empleado.edad}}</td>
+                    <td>{{empleado.coaching}}</td>
+                </tr>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        Total: {{empleados.length}}<br>
+                    </td>
+                </tr>
+            </tfoot>
+            </tbody>
+        </table>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.js"></script>
+    <script src="app.js"></script>
+    <script src="clase2.js"></script>
+</body>
+
+</html>

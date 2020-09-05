@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="directivasrc">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hola!</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body ng-controller="micontroller">
+    <img ng-src="{{logo}}">
+    <audio ng-src="{{audiomp3}}"></audio>
+
+    <video>
+        <source ng-repeat="video in videos" ng-src="{{video.url}}" type="{{video.tpye}}">
+    </video>
+
+    <picture>
+        <img  ng-src="{{logo}}">
+        <source  ng-src="{{logo}}">
+    </picture>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script>
+        angular.module('directivasrc', [])
+            .controller('micontroller', function ($scope) {
+                $scope.logo = 'https://cdn.educacionit.com/images/logo-educacionit.png'
+
+                $scope.videos = [
+                    { url: 'https://www.w3schools.com/html/movie.mp4', tpye: 'video/mp4' },
+                    { url: 'https://www.w3schools.com/html/movie.3gg', tpye: 'video/mp4' },
+                    { url: 'https://www.w3schools.com/html/movie.mp4', tpye: 'video/mp4' },
+                    { url: 'https://www.w3schools.com/html/movie.mp4', tpye: 'video/mp4' }
+                ]
+            })
+    </script>
+</body>
+
+</html>

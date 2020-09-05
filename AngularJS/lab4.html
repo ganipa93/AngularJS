@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="factories">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios y fabricas</title>
+</head>
+
+<body>
+    <main>
+        <section ng-controller="homeController">
+            <div ng-if="loading">Enviando</div>
+            <form ng-if="!isLogin" name="lognForm" novalidate ng-submit="enviar($event)">
+                <label>
+                    Usuario:<br>
+                    <input type="text" ng-model="user.user" ng-disabled="loading">
+                </label><br>
+                <label>
+                    Clave:<br>
+                    <input type="password" ng-model="user.pass" ng-disabled="loading">
+                </label><br>
+                <input type="submit" ng-disabled="loading">
+            </form>
+            <h3 ng-if="isLogin">Hola {{nombreuusario}}!!</h3>
+        </section>
+        <section ng-controller="listadoController">
+            <form ng-if="editItem" name="lognForm" novalidate ng-submit="editar(editItem.id, editItem)">
+                <label>
+                    Title:<br>
+                    <input type="text" ng-model="editItem.title" ng-disabled="loading">
+                </label><br>
+                <label>
+                    Urle:<br>
+                    <input type="url" ng-model="editItem.url" ng-disabled="loading">
+                </label><br>
+                <input type="submit" ng-disabled="loading">
+            </form>
+            <ul>
+                <li ng-repeat="item in listado | limitTo: 10">
+                    {{item | json}} <button ng-click="editarItem(item)">editar</button>
+                </li>
+            </ul>
+            <form ng-if="!isLogin" name="lognForm" novalidate ng-submit="crear(nuewItem)">
+                <label>
+                    Usuario:<br>
+                    <input type="text" ng-model="nuewItem.user" ng-disabled="loading">
+                </label><br>
+                <label>
+                    Edad:<br>
+                    <input type="number" ng-model="nuewItem.edad" ng-disabled="loading">
+                </label><br>
+                <input type="submit" ng-disabled="loading">
+            </form>
+        </section>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script>
+        angular.module('factories', [])
+            .constant('urlBase', 'https://jsonplaceholder.typicode.com/photos')
+            .controller('homeController', function ($scope, userSrv) {
+                $scope.loading = false;
+                $scope.isLogin = false;
+                $scope.nombreuusario = '';
+                $scope.user = {
+                    user: '',
+                    pass: ''
+                }
+                $scope.enviar = function (event) {
+                    $scope.loading = true;
+                    userSrv.login($scope.user.user, $scope.user.pass)
+                        .then(function (data) {
+                            $scope.isLogin = data;
+                            $scope.loading = false;
+
+                            if (data) {
+                                $scope.nombreuusario = userSrv.getNameUser()
+                            }
+                        })
+                }
+            })
+            .factory('userSrv', function ($q, $timeout) {
+                var userCurren;
+                return {
+                    login: function (user, pass) {
+                        return $q(function (resolve, reject) {
+                            $timeout(function () {
+                                if (user === 'fede') {
+                                    userCurren = user;
+                                    resolve(true);
+                                } else {
+                                    resolve(false);
+                                }
+                            }, 3000)
+                        })
+                    },
+                    getNameUser: function () {
+                        return userCurren;
+                    }
+                }
+            })
+            .controller('listadoController', function ($scope, listaSrv) {
+                $scope.loading = false;
+                $scope.nuewItem = {
+                    user: '',
+                    edad: 0
+                }
+
+                $scope.editarItem = function (item) {
+                    $scope.editItem = {
+                        title: item.title,
+                        url: item.url,
+                        id: item.id
+                    }
+                }
+                listaSrv.getAll().then(function (response) {
+                    $scope.listado = response.data;
+                })
+
+                $scope.crear = function (data) {
+                    $scope.loading = true;
+                    listaSrv.create(data).then(function (response) {
+                        debugger
+                        $scope.loading = false;
+                    })
+                }
+                $scope.editar = function (id, data) {
+                    listaSrv.update(id, data).then(function (response) {
+                        debugger
+                    })
+                }
+                $scope.eliminar = function (id) {
+                    listaSrv.delete(ida).then(function (response) {
+                        $scope.detalle = response.data;
+                    })
+                }
+            })
+            .factory('listaSrv', function ($http, urlBase) {
+                return {
+                    getAll: function () {
+                        return $http.get(urlBase);
+                    },
+                    getById: function (id) {
+                        return $http.get(urlBase + '/' + id);
+                    },
+                    create: function (body) {
+                        return $http.post(urlBase, body);
+                    },
+                    update: function (id, body) {
+                        return $http.put(urlBase + '/' + id, body);
+                    },
+                    delete: function () {
+                        return $http.delete(urlBase + '/' + id);
+                    },
+                }
+            })
+    </script>
+</body>
+
+</html>
